@@ -1,13 +1,13 @@
 {
   "name": "verify-emails-cli",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "license": "MIT",
   "bin": {
     "verify-emails-cli": "bin/verify-emails-cli"
   },
   "repository": {
-    "type": "local hard drive",
-    "url": "git.maybe.later"
+    "type": "git",
+    "url": "https://github.com/pleasemarkdarkly/email-verify-cli"
   },
   "scripts": {},
   "devDependencies": {},
