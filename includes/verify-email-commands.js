@@ -12,8 +12,9 @@ program
     .option('-d, --debug', 'DEBUG, ERROR, INFO, WARN')
     .option('-f, --filename <string>', 'i.e.filename')
     .option('-l, --directory <string>', 'i.e. directory (priority over file)')
+    .option('--no-unique', 'filter duplicate lines ** unimplemented')
     .option('-o, --output', 'timestamped filename')
-    .option('-z, --output-directory <string>', 'unimplemented')
+    .option('-z, --output-directory <string>', '** unimplemented')
     .parse(process.argv);
 
 module.exports = (function displayDebugMessageState() {
@@ -29,6 +30,8 @@ if (program.debug) {
     console.log(program.opts());
     console.log('\n');
 }
+
+const sort_unique = (program.uniq === false) ? false : true;
 
 switch (program.debug) {
     case 'DEBUG':

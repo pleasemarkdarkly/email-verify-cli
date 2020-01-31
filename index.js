@@ -12,6 +12,8 @@ module.exports = () => {
     return (-1);
   }
 
+  logger.info('filter duplicated entries: ' + program.unique);
+
   if (program.filename != undefined) {
     logger.info("program filename: " + program.filename);
     fs.lstat(program.filename, (err, stats) => {

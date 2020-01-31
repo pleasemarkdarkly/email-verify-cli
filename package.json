@@ -18,6 +18,7 @@
     "email-deep-validator": "^3.3.0",
     "fs-jetpack": "^2.2.3",
     "n-readlines": "^1.0.0",
+    "neek": "^1.1.2",
     "node-color-log": "^2.2.0",
     "ora": "^4.0.3"
   }
