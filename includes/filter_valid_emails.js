@@ -1,19 +1,19 @@
-exports = lineByLine = require('n-readlines');
-exports = EmailValidator = require('email-deep-validator');
-
-const ora = require('ora');
-const fs = require('fs');
+const lineByLine = require('n-readlines'),
+    EmailValidator = require('email-deep-validator'),
+    ts = require('./timestamp'),
+    ora = require('ora'),
+    fs = require('fs');
 
 require('./verify-email-commands');
 
-exports = filter_valid_emails = async function (filename) {
+module.exports.filter_valid_emails = filter_valid_emails = async function (filename) {
     const liner = new lineByLine(filename.toString());
     const yahoo = "yahoo";
 
     let email, line_count = 0, error_count = 0, warn_count = 0, valid_email_count = 0;
     let new_date = new Date();
-    let valid_email_file_output = timestamp(new_date) + '_valid.csv';
-    let warning_email_file_output = timestamp(new_date) + '_warning.csv';
+    let valid_email_file_output = ts.timestamp(new_date) + '_valid.csv';
+    let warning_email_file_output = ts.timestamp(new_date) + '_warning.csv';
 
     try {
         fs.open(valid_email_file_output, 'w', function (err, file) {

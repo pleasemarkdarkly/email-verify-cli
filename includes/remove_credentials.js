@@ -1,9 +1,8 @@
 const replace = require('replace-in-file'),
-    ora = require('ora');
+    ora = require('ora'),
+    logger = require('node-color-log');
 
-exports = logger = require('node-color-log');
-
-exports = remove_credentials = async function (filename) {
+module.exports.remove_credentials = remove_credentials = async function (filename) {
     logger.warn("removing [;:]: " + filename);
     const options = {
         files: filename,
@@ -12,7 +11,7 @@ exports = remove_credentials = async function (filename) {
     };
 
     const spinner = ora().start();
-    
+
     try {
         const results = await replace(options)
         spinner.stop();
@@ -23,5 +22,3 @@ exports = remove_credentials = async function (filename) {
         logger.error('credential replacement error', error);
     }
 };
-
-// arr_files[arr_files.length] = filename;

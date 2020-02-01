@@ -13,11 +13,13 @@
   "devDependencies": {},
   "dependencies": {
     "axios": "^0.19.2",
-    "replace-in-file": "^5.0.2",
     "commander": "^4.1.0",
     "email-deep-validator": "^3.3.0",
     "n-readlines": "^1.0.0",
     "node-color-log": "^2.2.0",
-    "ora": "^4.0.3"
+    "ora": "^4.0.3",
+    "polka": "^0.5.2",
+    "replace-in-file": "^5.0.2",
+    "sqlite-async": "^1.0.12"
   }
 }

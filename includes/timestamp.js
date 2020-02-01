@@ -1,4 +1,4 @@
-exports = timestamp = function timestamp(date) {
+module.exports.timestamp = function (date) {
     var year = date.getFullYear(),
         month = date.getMonth(),
         day = date.getDate(),
