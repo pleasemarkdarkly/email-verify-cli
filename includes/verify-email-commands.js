@@ -6,7 +6,7 @@ var chalk = require('chalk'),
     error = chalk.bold.red,
     warning = chalk.keyword('orange');
 
-program.version('0.0.1');
+program.version('1.0.2');
 
 program
     .option('-d, --debug', 'DEBUG, ERROR, INFO, WARN')
