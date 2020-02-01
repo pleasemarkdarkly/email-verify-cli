@@ -1,6 +1,6 @@
 {
   "name": "verify-emails-cli",
-  "version": "0.0.6",
+  "version": "0.0.8",
   "license": "MIT",
   "bin": {
     "verify-emails-cli": "bin/verify-emails-cli"
@@ -20,6 +20,7 @@
     "n-readlines": "^1.0.0",
     "neek": "^1.1.2",
     "node-color-log": "^2.2.0",
-    "ora": "^4.0.3"
+    "ora": "^4.0.3",
+    "replace-in-file": "^5.0.2"
   }
 }

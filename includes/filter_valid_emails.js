@@ -1,6 +1,5 @@
 exports = lineByLine = require('n-readlines');
 exports = EmailValidator = require('email-deep-validator');
-exports = jetpack = require('fs-jetpack');
 
 const ora = require('ora');
 const fs = require('fs');
@@ -11,20 +10,35 @@ exports = filter_valid_emails = async function (filename) {
     const liner = new lineByLine(filename.toString());
     const yahoo = "yahoo";
 
-    let email, line_count = 0, error_count = 0, valid_email_count = 0;
-    let valid_email_file_output = timestamp(new Date()) + '.csv';
+    let email, line_count = 0, error_count = 0, warn_count = 0, valid_email_count = 0;
+    let new_date = new Date();
+    let valid_email_file_output = timestamp(new_date) + '_valid.csv';
+    let warning_email_file_output = timestamp(new_date) + '_warning.csv';
 
     try {
         fs.open(valid_email_file_output, 'w', function (err, file) {
             if (err) throw err;
-            logger.info('created csv valid emails: ' + valid_email_file_output.toString());
+            logger.info('created csv for (valid) emails: ' + valid_email_file_output.toString());
         });
         fs.appendFile(valid_email_file_output, 'email' + '\n', function (err) {
             if (err) throw err;
         });
     } catch (err) {
-        logger.error('csv create, append error: ' + err);
+        logger.error('csv valid (create, append) error: ' + err);
     }
+
+    try {
+        fs.open(warning_email_file_output, 'w', function (err, file) {
+            if (err) throw err;
+            logger.info('created csv (warning) emails: ' + warning_email_file_output.toString());
+        });
+        fs.appendFile(warning_email_file_output, 'email' + '\n', function (err) {
+            if (err) throw err;
+        });
+    } catch (err) {
+        logger.error('csv warning (create, append) error: ' + err);
+    }
+
 
     while (line = liner.next()) {
         email = line.toString();
@@ -38,6 +52,8 @@ exports = filter_valid_emails = async function (filename) {
 
             if (wellFormed == true && validDomain == true && validMailbox == true) {
                 spinner.stop();
+                valid_email_count++;
+                logger.info(email);
                 try {
                     fs.appendFile(valid_email_file_output, email + ',\n', function (error) {
                         spinner.stop();
@@ -48,15 +64,25 @@ exports = filter_valid_emails = async function (filename) {
                     });
                 } catch (error) {
                     spinner.stop();
-                    logger.error("writing valid email to file failed")
+                    logger.error("writing " + email + " (valid) file failed")
                 }
-                valid_email_count++;
-                logger.info(email);
             } else if (wellFormed == true && validDomain == true && validMailbox == null) {
                 if (email.indexOf(yahoo) != -1) {
                     spinner.stop();
-                    error_count++;
+                    warn_count++;
                     logger.warn(email);
+                    try {
+                        fs.appendFile(warning_email_file_output, email + ',\n', function (error) {
+                            spinner.stop();
+                            if (error) {
+                                spinner.stop();
+                                throw error;
+                            }
+                        });
+                    } catch (error) {
+                        spinner.stop();
+                        logger.error("writing " + email + " (warning) file failed")
+                    }
                 }
             } else {
                 spinner.stop();
@@ -69,15 +95,38 @@ exports = filter_valid_emails = async function (filename) {
             logger.error("email-deep-validation check failed");
         }
     };
-};
-
-/**
-logger.info(filename.toString() + " : " + valid_email_file_output + " (" + valid_email_count + "/" + error_count + "/" + line_count + ")");
 
     var stats = fs.statSync(valid_email_file_output);
     var fileSize = stats["size"];
-    if (fileSize < 8) {
-        fs.unlink(valid_email_file_output)
-        logger.warning("removing csv: " + valid_email_file_output + " (" + fileSize + ") size");
-    };
-     */
+    logger.info('-------------------------------------------------------------');
+    logger.info(filename.toString() + " => " + valid_email_file_output);
+    logger.info(valid_email_file_output + " statistics: (" + fileSize + " bytes) (" + valid_email_count + " valid) / (" + warn_count + " warning) / (" + error_count + " errors) / (" + line_count + " total)");
+    logger.info('-------------------------------------------------------------');
+
+    try {
+        if (fileSize <= 8) fs.unlink(valid_email_file_output, function (error) {
+            if (error) {
+                throw error;
+            }
+        });
+    } catch {
+        logger.error("removing empty files failed")
+    }
+
+    stats = fs.statSync(warning_email_file_output);
+    fileSize = stats["size"];
+    logger.info('-------------------------------------------------------------');
+    logger.info(filename.toString() + " => " + warning_email_file_output);
+    logger.info(warning_email_file_output + " statistics: (" + fileSize + " bytes) (" + valid_email_count + " valid) / (" + warn_count + " warning) / (" + error_count + " errors) / (" + line_count + " total)");
+    logger.info('-------------------------------------------------------------');
+
+    try {
+        if (fileSize <= 8) fs.unlink(warning_email_file_output, function (error) {
+            if (error) {
+                throw error;
+            }
+        });
+    } catch {
+        logger.error("removing empty files failed")
+    }
+};
