@@ -103,6 +103,7 @@ exports = filter_valid_emails = async function (filename) {
     logger.info(valid_email_file_output + " statistics: (" + fileSize + " bytes) (" + valid_email_count + " valid) / (" + warn_count + " warning) / (" + error_count + " errors) / (" + line_count + " total)");
     logger.info('-------------------------------------------------------------');
 
+    /*
     try {
         if (fileSize <= 8) fs.unlink(valid_email_file_output, function (error) {
             if (error) {
@@ -112,6 +113,7 @@ exports = filter_valid_emails = async function (filename) {
     } catch {
         logger.error("removing empty files failed")
     }
+    */
 
     stats = fs.statSync(warning_email_file_output);
     fileSize = stats["size"];
@@ -120,6 +122,7 @@ exports = filter_valid_emails = async function (filename) {
     logger.info(warning_email_file_output + " statistics: (" + fileSize + " bytes) (" + valid_email_count + " valid) / (" + warn_count + " warning) / (" + error_count + " errors) / (" + line_count + " total)");
     logger.info('-------------------------------------------------------------');
 
+    /*
     try {
         if (fileSize <= 8) fs.unlink(warning_email_file_output, function (error) {
             if (error) {
@@ -129,4 +132,5 @@ exports = filter_valid_emails = async function (filename) {
     } catch {
         logger.error("removing empty files failed")
     }
+    */
 };
