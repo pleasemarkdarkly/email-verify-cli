@@ -3,8 +3,6 @@ const replace = require('replace-in-file'),
 
 exports = logger = require('node-color-log');
 
-exports = arr_files = [];
-
 exports = remove_credentials = async function (filename) {
     logger.warn("removing [;:]: " + filename);
     const options = {

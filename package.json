@@ -1,6 +1,6 @@
 {
   "name": "verify-emails-cli",
-  "version": "0.0.8",
+  "version": "1.0.0",
   "license": "MIT",
   "bin": {
     "verify-emails-cli": "bin/verify-emails-cli"
@@ -13,14 +13,11 @@
   "devDependencies": {},
   "dependencies": {
     "axios": "^0.19.2",
-    "better-queue": "^3.8.10",
+    "replace-in-file": "^5.0.2",
     "commander": "^4.1.0",
     "email-deep-validator": "^3.3.0",
-    "fs-jetpack": "^2.2.3",
     "n-readlines": "^1.0.0",
-    "neek": "^1.1.2",
     "node-color-log": "^2.2.0",
-    "ora": "^4.0.3",
-    "replace-in-file": "^5.0.2"
+    "ora": "^4.0.3"
   }
 }
