@@ -6,14 +6,15 @@ var chalk = require('chalk'),
     error = chalk.bold.red,
     warning = chalk.keyword('orange');
 
-exports = sqlite = false;
+var walkPath = '.',
+    sqlite = false;
 
 program.version('1.0.4');
 
 program
     .option('-d, --debug', 'DEBUG, ERROR, INFO, WARN')
     .option('--sqlite', 'search for emails..')
-    .option('-b --db_name', 'specify db name')
+    .option('-b --db-name <string>', 'specify custom db name, overiding emails.db')
     .option('-f, --filename <string>', 'i.e.filename')
     .option('-l, --directory <string>', 'i.e. directory (priority over file)')
     .option('-o, --output', 'timestamped filename')
@@ -24,12 +25,6 @@ if (program.debug) {
     console.log(program.opts());
     console.log('\n');
 }
-
-var email_db = "email.db";
-if (program.db_name) {
-    email_db = program_db_name;
-}
-module.exports.email_db = email_db;
 
 switch (program.debug) {
     case 'DEBUG':
@@ -62,7 +57,28 @@ module.exports = (function displayDebugMessageState() {
 })();
 
 if (program.sqlite) {
-    logger.info("running in db mode");
     sqlite = true;
-    require('./email_dao');
+    logger.info('db: mode enabled (' + sqlite + ')');
+
+    if (program.dbName) {
+        db_name = program.dbName;
+        logger.info('db (filename) (' + program.dbName.toString() + ')');
+    } else {
+        db_name = email_db = "email.db"
+        logger.info('db (filename default): ' + email_db);
+    }
+
+    if (program.directory) {
+        walkPath = program.directory;
+        logger.info('db scan dir: (' + walkPath + ')');
+    } else {
+        walkPath = '.';
+    }
 };
+
+module.exports = {
+    walkPath: walkPath,
+    sqlite: sqlite,
+    dbName: db_name,
+    program_version: program.version
+}

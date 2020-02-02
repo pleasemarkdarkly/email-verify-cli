@@ -1,8 +1,9 @@
-logger = logger = require('node-color-log');
-program = require('./verify-email-commands');
+const program = require('./verify-email-commands');
+const parse_file = require('./ingest_file_contents');
+const ora = require('ora');
 
-module.exports.walkPath = walkPath = '.',
-    fs = require('fs');
+const fs = require('fs');
+var db = require('./email_dao');
 
 const extension = '.txt';
 var extension_count = 0;
@@ -27,29 +28,21 @@ module.exports.walk = walk = function (dir, done) {
                 } else {
                     if (file.indexOf(extension) !== -1) {
                         extension_count++;
-                        logger.warn('-------------------------------------------------------------');
-                        if (sqlite) {
-                            const scanner_db = require('./email_dao');
-                            scanner_db.insert_files(file);
-
-                            /**TODO: 
-                             * 
-                             * 1. configure walk path as parameter
-                             * 2. parameter file saves last scanned file
-                             * 3. split credential files
-                             * 4. dashboard for status and stastics
-                             * 
-                             * 
-                             */
-
-
+                        logger.log('-------------------------------------------------------------');
+                        logger.log('db processing no. (' + extension_count + ') ' + file);
+                        logger.log('-------------------------------------------------------------');
+                        
+                        const spinner = ora().start();
+                        if (program.sqlite) {
+                            db.insert_files(file)                            
+                            parse_file.ingest_file_contents(file);
+                            spinner.stop();
                         } else if (program.filename) {
                             const rm_creds = require('./remove_credentials');
                             rm_creds.remove_credentials(file);
                             const filter = require('./filter_valid_emails');
                             filter.filter_valid_emails(file);
                         }
-                        logger.warn('-------------------------------------------------------------');
                     }
                     next();
                 }

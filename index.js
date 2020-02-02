@@ -1,5 +1,7 @@
 const fs = require('fs'),
-  ora = require('ora');
+  ora = require('ora'),
+  db = require('./includes/email_dao'),
+  parse_file = require('./includes/ingest_file_contents');
 
 module.exports = () => {
   var commands = require('./includes/verify-email-commands');
@@ -11,19 +13,38 @@ module.exports = () => {
     try {
       if (fs.existsSync("email.db")) {
         db.continue_scanning();
-      } else {
-        logger.warn('db: email.db not found');
-        logger.warn('db: creating email.db and email tables..');
 
-        db.init_db();
+        if (program.filename != undefined) {
+          db.insert_files(program.filename)
+          parse_file.ingest_file_contents(program.filename);
+          logger.info('-------------------------------------------------------------');
+          logger.info('db: finished ingesting file: (' + program.filename + ') .');
+          logger.info('-------------------------------------------------------------');
+        }
 
         const looper = require('./includes/file_looper');
-        looper.walk(looper.walkPath, function (error) {
+        looper.walk(commands.walkPath, function (error) {
           if (error) {
+            logger, info('db: looper walk error thrown');
             throw error;
           } else {
             logger.info('-------------------------------------------------------------');
-            logger.info('db: finished looping through folder: (' + " . " + ') .');
+            logger.info('db: finished looping through folder: (' + commands.walkPath + ') .');
+            logger.info('-------------------------------------------------------------');
+          }
+        });
+      } else {
+        logger.error('db: email.db not found');
+        db.init_db();
+
+        const looper = require('./includes/file_looper');
+        looper.walk(commands.walkPath, function (error) {
+          if (error) {
+            logger, info('db: looper walk error thrown');
+            throw error;
+          } else {
+            logger.info('-------------------------------------------------------------');
+            logger.info('db: finished looping through folder: (' + commands.walkPath + ') .');
             logger.info('-------------------------------------------------------------');
           }
         });

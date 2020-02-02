@@ -1,10 +1,11 @@
 const lineByLine = require('n-readlines'),
     EmailValidator = require('email-deep-validator'),
+    logger = logger = require('node-color-log'),
     ts = require('./timestamp'),
     ora = require('ora'),
     fs = require('fs');
 
-require('./verify-email-commands');
+// require('./verify-email-commands');
 
 module.exports.filter_valid_emails = filter_valid_emails = async function (filename) {
     const liner = new lineByLine(filename.toString());
