@@ -1,6 +1,6 @@
 {
   "name": "verify-emails-cli",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "license": "MIT",
   "bin": {
     "verify-emails-cli": "bin/verify-emails-cli"
